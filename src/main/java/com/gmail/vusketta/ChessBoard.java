@@ -1,5 +1,6 @@
 package com.gmail.vusketta;
 
+import com.gmail.vusketta.exceptions.CellCanNotBeUnderAttack;
 import com.gmail.vusketta.exceptions.NoSuchMoveException;
 
 import java.util.*;
@@ -157,6 +158,7 @@ public class ChessBoard implements Board, Position {
         final boolean knightMove = Math.abs(dx) == 1 && Math.abs(dy) == 2 || Math.abs(dx) == 2 && Math.abs(dy) == 1;
         final boolean bishopMove = Math.abs(dx) == Math.abs(dy) && isNotBetween(move);
         final boolean queenMove = rookMove || bishopMove;
+
         return switch (fromPiece) {
             case WHITE_PAWN -> whitePawnMove || whitePawnAttack || whiteEnPassant;
             case BLACK_PAWN -> blackPawnMove || blackPawnAttack || blackEnPassant;
@@ -176,25 +178,19 @@ public class ChessBoard implements Board, Position {
 
     @Override
     public boolean isUnderAttack(Coordinate coordinate) {
-        final int x = coordinate.x();
-        final int y = coordinate.y();
-        if (getCell(y, x).isWhite()) {
+        final Cell piece = getCell(coordinate);
+        if (piece.isEmpty()) throw new CellCanNotBeUnderAttack(piece);
+        if (piece.isWhite() || piece.isBlack()) {
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
-                    if (getCell(j, i).isWhite() || getCell(j, i).isEmpty()) continue;
-                    if (isValid(Move.of(Coordinate.of(i, j), Coordinate.of(x, y)))) return true;
+                    final Coordinate ij = Coordinate.of(i, j);
+                    final Cell cell = getCell(ij);
+                    final boolean isPieceColour = piece.isWhite() ? cell.isWhite() : cell.isBlack();
+                    if (isPieceColour || cell.isEmpty()) continue;
+                    if (isValid(Move.of(ij, coordinate))) return true;
                 }
             }
         }
-        if (getCell(y, x).isBlack()) {
-            for (int i = 0; i < 8; i++) {
-                for (int j = 0; j < 8; j++) {
-                    if (getCell(j, i).isBlack() || getCell(j, i).isEmpty()) continue;
-                    if (isValid(Move.of(Coordinate.of(i, j), Coordinate.of(x, y)))) return true;
-                }
-            }
-        }
-        if (getCell(y, x).isEmpty()) throw new IllegalArgumentException("Empty cell can not be attack");
         return false;
     }
 
