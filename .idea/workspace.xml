@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fcdb9742-30bb-45cd-8a74-0243b6c021b4" name="Changes" comment="Make an exception and used in isUnderAttack simplified method.">
+    <list default="true" id="fcdb9742-30bb-45cd-8a74-0243b6c021b4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/ChessBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/ChessBoard.java" afterDir="false" />
     </list>
@@ -81,7 +81,7 @@
       <option name="presentableId" value="Default" />
       <updated>1675710697247</updated>
       <workItem from="1675710698635" duration="2072000" />
-      <workItem from="1675719179828" duration="3447000" />
+      <workItem from="1675719179828" duration="4987000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1675710867390</created>
@@ -104,7 +104,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675721351371</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Kings can be near fix.">
+      <created>1675722824175</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1675722824175</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -125,6 +132,7 @@
     <MESSAGE value="Initial commit" />
     <MESSAGE value="workspace.xml changing" />
     <MESSAGE value="Make an exception and used in isUnderAttack simplified method." />
-    <option name="LAST_COMMIT_MESSAGE" value="Make an exception and used in isUnderAttack simplified method." />
+    <MESSAGE value="Kings can be near fix." />
+    <option name="LAST_COMMIT_MESSAGE" value="Kings can be near fix." />
   </component>
 </project>

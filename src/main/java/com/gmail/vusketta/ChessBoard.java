@@ -76,6 +76,10 @@ public class ChessBoard implements Board, Position {
         return GameResult.UNKNOWN;
     }
 
+    private boolean checkDraw() {
+        return false;
+    }
+
     @Override
     public Turn getTurn() {
         return turn;
@@ -171,15 +175,17 @@ public class ChessBoard implements Board, Position {
             case BLACK_BISHOP -> bishopMove && !toPiece.isBlack();
             case WHITE_QUEEN -> queenMove && !toPiece.isWhite();
             case BLACK_QUEEN -> queenMove && !toPiece.isBlack();
-            case WHITE_KING -> kingMove && !toPiece.isWhite() && !checkPieceIsNearKing(to);
-            case BLACK_KING -> kingMove && !toPiece.isBlack() && !checkPieceIsNearKing(to);
+            case WHITE_KING -> kingMove && !toPiece.isWhite() && checkPieceIsNotNearKing(to);
+            case BLACK_KING -> kingMove && !toPiece.isBlack() && checkPieceIsNotNearKing(to);
             case EMPTY -> false;
         };
     }
 
-    private boolean checkPieceIsNearKing(Coordinate piece) {
-        final Coordinate king = kingPosition.get(turn == Turn.WHITE ? Cell.WHITE_KING : Cell.BLACK_KING);
-        return Math.abs(king.x() - piece.x()) == 1 || Math.abs(king.y() - piece.y()) == 1;
+    private boolean checkPieceIsNotNearKing(Coordinate piece) {
+        final Coordinate king = kingPosition.get(turn == Turn.WHITE ? Cell.BLACK_KING : Cell.WHITE_KING);
+        final int dx = Math.abs(king.x() - piece.x());
+        final int dy = Math.abs(king.y() - piece.y());
+        return !(dx == 1 && dy == 0 || dx == 0 && dy == 1 || dx == 1 && dy == 1);
     }
 
     @Override
