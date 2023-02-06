@@ -133,6 +133,7 @@ public class ChessBoard implements Board, Position {
         if (turn == Turn.BLACK && fromPiece.isWhite()) {
             return false;
         }
+
         final Cell toPiece = getCell(to);
         if (toPiece == Cell.WHITE_KING || toPiece == Cell.BLACK_KING)
             return false;
@@ -170,10 +171,15 @@ public class ChessBoard implements Board, Position {
             case BLACK_BISHOP -> bishopMove && !toPiece.isBlack();
             case WHITE_QUEEN -> queenMove && !toPiece.isWhite();
             case BLACK_QUEEN -> queenMove && !toPiece.isBlack();
-            case WHITE_KING -> kingMove && !toPiece.isWhite();
-            case BLACK_KING -> kingMove && !toPiece.isBlack();
+            case WHITE_KING -> kingMove && !toPiece.isWhite() && !checkPieceIsNearKing(to);
+            case BLACK_KING -> kingMove && !toPiece.isBlack() && !checkPieceIsNearKing(to);
             case EMPTY -> false;
         };
+    }
+
+    private boolean checkPieceIsNearKing(Coordinate piece) {
+        final Coordinate king = kingPosition.get(turn == Turn.WHITE ? Cell.WHITE_KING : Cell.BLACK_KING);
+        return Math.abs(king.x() - piece.x()) == 1 || Math.abs(king.y() - piece.y()) == 1;
     }
 
     @Override
