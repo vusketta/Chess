@@ -47,10 +47,7 @@ public class ChessBoard implements Board, Position {
 
     @Override
     public GameResult makeMove(Move move) {
-        if (isUnderAttack(kingPosition.get(turn == Turn.WHITE ? Cell.WHITE_KING : Cell.BLACK_KING))) {
-            List<Move> allCheckedMoves = allPossibleMoves().stream().filter(this::checkMove).toList();
-            if (allCheckedMoves.isEmpty()) return GameResult.LOSE;
-        }
+        if (!isValid(move)) return GameResult.LOSE;
 
         Cell piece = getCell(move.from());
         if (piece == Cell.WHITE_KING || piece == Cell.BLACK_KING) kingPosition.put(piece, move.to());
@@ -69,38 +66,13 @@ public class ChessBoard implements Board, Position {
             if (temp.isEmpty() && Math.abs(move.to().x() - move.from().x()) == 1 && piece == Cell.BLACK_PAWN)
                 field[3][move.to().x()] = Cell.EMPTY;
         }
+
+        if (isUnderAttack(kingPosition.get(turn == Turn.WHITE ? Cell.WHITE_KING : Cell.BLACK_KING)))
+            return GameResult.LOSE;
         moveTrackers[move.to().y()][move.to().x()] = MoveTracker.of(move, moveNumber);
         turn = turn == Turn.WHITE ? Turn.BLACK : Turn.WHITE;
         moveNumber++;
-        if (isUnderAttack(kingPosition.get(turn == Turn.WHITE ? Cell.WHITE_KING : Cell.BLACK_KING))) {
-            List<Move> allCheckedMoves = allPossibleMoves().stream().filter(this::checkMove).toList();
-            if (allCheckedMoves.isEmpty()) return GameResult.WIN;
-        }
         return GameResult.UNKNOWN;
-    }
-
-    private boolean checkMove(Move move) {
-        Cell[][] field = this.field;
-        Map<Cell, Coordinate> kingPosition = this.kingPosition;
-
-        Cell piece = getCell(move.from());
-        if (piece == Cell.WHITE_KING || piece == Cell.BLACK_KING) kingPosition.put(piece, move.to());
-
-        field[move.from().y()][move.from().x()] = Cell.EMPTY;
-
-        Cell temp = field[move.to().y()][move.to().x()];
-        if (turn == Turn.WHITE) {
-            field[move.to().y()][move.to().x()] =
-                    piece == Cell.WHITE_PAWN && move.to().y() == 7 ? Cell.WHITE_QUEEN : piece;
-            if (temp.isEmpty() && Math.abs(move.to().x() - move.from().x()) == 1 && piece == Cell.WHITE_PAWN)
-                field[4][move.to().x()] = Cell.EMPTY;
-        } else {
-            field[move.to().y()][move.to().x()] =
-                    piece == Cell.BLACK_PAWN && move.to().y() == 0 ? Cell.BLACK_QUEEN : piece;
-            if (temp.isEmpty() && Math.abs(move.to().x() - move.from().x()) == 1 && piece == Cell.BLACK_PAWN)
-                field[3][move.to().x()] = Cell.EMPTY;
-        }
-        return !isUnderAttack(kingPosition.get(turn == Turn.WHITE ? Cell.WHITE_KING : Cell.BLACK_KING));
     }
 
     @Override
@@ -161,6 +133,8 @@ public class ChessBoard implements Board, Position {
             return false;
         }
         final Cell toPiece = getCell(to);
+        if (toPiece == Cell.WHITE_KING || toPiece == Cell.BLACK_KING)
+            return false;
 
         final int dx = to.x() - from.x();
         final int dy = to.y() - from.y();
