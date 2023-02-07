@@ -53,26 +53,24 @@ public class ChessBoard implements Board, Position {
         Cell piece = getCell(move.from());
         if (piece == Cell.WHITE_KING || piece == Cell.BLACK_KING) kingPosition.put(piece, move.to());
 
-        field[move.from().y()][move.from().x()] = Cell.EMPTY;
+        changeCell(move, move.from(), Cell.EMPTY);
 
         Cell temp = field[move.to().y()][move.to().x()];
         if (turn == Turn.WHITE) {
-            field[move.to().y()][move.to().x()] =
-                    piece == Cell.WHITE_PAWN && move.to().y() == 7 ? Cell.WHITE_QUEEN : piece;
+            changeCell(move, move.to(), piece == Cell.WHITE_PAWN && move.to().y() == 7 ? Cell.WHITE_QUEEN : piece);
             if (temp.isEmpty() && Math.abs(move.to().x() - move.from().x()) == 1 && piece == Cell.WHITE_PAWN)
-                field[4][move.to().x()] = Cell.EMPTY;
+                changeCell(move, Coordinate.of(move.to().x(), 4), Cell.EMPTY);
         } else {
-            field[move.to().y()][move.to().x()] =
-                    piece == Cell.BLACK_PAWN && move.to().y() == 0 ? Cell.BLACK_QUEEN : piece;
+            changeCell(move, move.to(), piece == Cell.BLACK_PAWN && move.to().y() == 0 ? Cell.BLACK_QUEEN : piece);
             if (temp.isEmpty() && Math.abs(move.to().x() - move.from().x()) == 1 && piece == Cell.BLACK_PAWN)
-                field[3][move.to().x()] = Cell.EMPTY;
+                changeCell(move, Coordinate.of(move.to().x(), 3), Cell.EMPTY);
         }
 
         if (isUnderAttack(kingPosition.get(turn == Turn.WHITE ? Cell.WHITE_KING : Cell.BLACK_KING)))
             return GameResult.LOSE;
-        moveTrackers[move.to().y()][move.to().x()] = MoveTracker.of(move, moveNumber);
-        turn = turn == Turn.WHITE ? Turn.BLACK : Turn.WHITE;
+
         moveNumber++;
+        turn = turn == Turn.WHITE ? Turn.BLACK : Turn.WHITE;
         return GameResult.UNKNOWN;
     }
 
@@ -299,6 +297,13 @@ public class ChessBoard implements Board, Position {
     @Override
     public Cell getCell(Coordinate coordinate) {
         return getCell(coordinate.y(), coordinate.x());
+    }
+
+    private void changeCell(Move move, Coordinate coordinate, Cell cell) {
+        final int x = coordinate.x();
+        final int y = coordinate.y();
+        field[y][x] = cell;
+        moveTrackers[y][x] = MoveTracker.of(move, moveNumber);
     }
 
     @Override
