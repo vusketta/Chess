@@ -1,6 +1,6 @@
 package com.gmail.vusketta;
 
-public class TwoPlayerGame {
+public class TwoPlayerGame implements Game {
     private final Board board;
     private final Player player1;
     private final Player player2;
@@ -12,6 +12,7 @@ public class TwoPlayerGame {
         this.player2 = player2;
     }
 
+    @Override
     public int play(boolean log) {
         while (true) {
             final int result1 = makeMove(player1, 1, log);
