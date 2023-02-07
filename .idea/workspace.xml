@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fcdb9742-30bb-45cd-8a74-0243b6c021b4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/ChessBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/ChessBoard.java" afterDir="false" />
     </list>
@@ -84,7 +83,9 @@
       <workItem from="1675710698635" duration="2072000" />
       <workItem from="1675719179828" duration="5855000" />
       <workItem from="1675732296260" duration="1451000" />
-      <workItem from="1675738773243" duration="4863000" />
+      <workItem from="1675738773243" duration="5341000" />
+      <workItem from="1675744217159" duration="32000" />
+      <workItem from="1675775373215" duration="686000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1675710867390</created>
@@ -135,7 +136,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675733255639</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="New method inside is created and isUnderAttack is remade">
+      <created>1675743943949</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1675743943949</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -159,6 +167,7 @@
     <MESSAGE value="Kings can be near fix." />
     <MESSAGE value="New method changeCell" />
     <MESSAGE value="Input params of methods in ChessBoard class are final now" />
-    <option name="LAST_COMMIT_MESSAGE" value="Input params of methods in ChessBoard class are final now" />
+    <MESSAGE value="New method inside is created and isUnderAttack is remade" />
+    <option name="LAST_COMMIT_MESSAGE" value="New method inside is created and isUnderAttack is remade" />
   </component>
 </project>

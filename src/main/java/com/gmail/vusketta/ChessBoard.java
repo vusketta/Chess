@@ -12,6 +12,7 @@ public class ChessBoard implements Board, Position {
     private final Map<Cell, Coordinate> kingPosition;
     private Turn turn;
     private int moveNumber;
+    private int draw50MovesRule;
 
     public ChessBoard() {
         field = new Cell[8][8];
@@ -39,6 +40,7 @@ public class ChessBoard implements Board, Position {
         kingPosition.put(Cell.BLACK_KING, Coordinate.of(4, 7));
         turn = Turn.WHITE;
         moveNumber = 1;
+        draw50MovesRule = 0;
     }
 
     private boolean inside(Coordinate coordinate) {
@@ -59,17 +61,17 @@ public class ChessBoard implements Board, Position {
         Cell piece = getCell(move.from());
         if (piece == Cell.WHITE_KING || piece == Cell.BLACK_KING) kingPosition.put(piece, move.to());
 
-        changeCell(move, move.from(), Cell.EMPTY);
+        killCell(move, move.from());
 
         Cell temp = field[move.to().y()][move.to().x()];
         if (turn == Turn.WHITE) {
             changeCell(move, move.to(), piece == Cell.WHITE_PAWN && move.to().y() == 7 ? Cell.WHITE_QUEEN : piece);
             if (temp.isEmpty() && Math.abs(move.to().x() - move.from().x()) == 1 && piece == Cell.WHITE_PAWN)
-                changeCell(move, Coordinate.of(move.to().x(), 4), Cell.EMPTY);
+                killCell(move, Coordinate.of(move.to().x(), 4));
         } else {
             changeCell(move, move.to(), piece == Cell.BLACK_PAWN && move.to().y() == 0 ? Cell.BLACK_QUEEN : piece);
             if (temp.isEmpty() && Math.abs(move.to().x() - move.from().x()) == 1 && piece == Cell.BLACK_PAWN)
-                changeCell(move, Coordinate.of(move.to().x(), 3), Cell.EMPTY);
+                killCell(move, Coordinate.of(move.to().x(), 3));
         }
 
         if (isUnderAttack(kingPosition.get(turn == Turn.WHITE ? Cell.WHITE_KING : Cell.BLACK_KING)))
@@ -81,6 +83,7 @@ public class ChessBoard implements Board, Position {
     }
 
     private boolean checkDraw() {
+        if (draw50MovesRule == 50) return true;
         return false;
     }
 
@@ -216,7 +219,7 @@ public class ChessBoard implements Board, Position {
             final Coordinate rook2 = Coordinate.of(i, y);
             if (inside(rook1) && (getCell(rook1) == rook || getCell(rook1) == queen) && isNotBetween(Move.of(rook1, coordinate)))
                 return true;
-            if (inside(rook2) && (getCell(rook2) == rook || getCell(rook2) == queen)  && isNotBetween(Move.of(rook2, coordinate)))
+            if (inside(rook2) && (getCell(rook2) == rook || getCell(rook2) == queen) && isNotBetween(Move.of(rook2, coordinate)))
                 return true;
         }
 
@@ -326,7 +329,8 @@ public class ChessBoard implements Board, Position {
                 moves.add(Move.of(coordinate, Coordinate.of(x - 1, y)));
                 moves.add(Move.of(coordinate, Coordinate.of(x - 1, y - 1)));
             }
-            case EMPTY -> {}
+            case EMPTY -> {
+            }
         }
         return moves.stream().filter(this::isValid).collect(Collectors.toList());
     }
@@ -355,6 +359,13 @@ public class ChessBoard implements Board, Position {
         final int y = coordinate.y();
         field[y][x] = cell;
         moveTrackers[y][x] = MoveTracker.of(move, moveNumber);
+        draw50MovesRule++;
+        if (cell == Cell.WHITE_PAWN || cell == Cell.BLACK_PAWN) draw50MovesRule = 0;
+    }
+
+    private void killCell(final Move move, final Coordinate coordinate) {
+        changeCell(move, coordinate, Cell.EMPTY);
+        draw50MovesRule = 0;
     }
 
     @Override
