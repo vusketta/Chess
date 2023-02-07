@@ -47,7 +47,7 @@ public class ChessBoard implements Board, Position {
     }
 
     @Override
-    public GameResult makeMove(Move move) {
+    public GameResult makeMove(final Move move) {
         if (!isValid(move)) return GameResult.LOSE;
 
         Cell piece = getCell(move.from());
@@ -83,7 +83,7 @@ public class ChessBoard implements Board, Position {
         return turn;
     }
 
-    private boolean isNotBetween(Move move) throws NoSuchMoveException {
+    private boolean isNotBetween(final Move move) throws NoSuchMoveException {
         Coordinate from = move.from();
         final Coordinate to = move.to();
         final int dx = to.x() - from.x();
@@ -121,7 +121,7 @@ public class ChessBoard implements Board, Position {
     }
 
     @Override
-    public boolean isValid(Move move) {
+    public boolean isValid(final Move move) {
         final Coordinate from = move.from();
         final Coordinate to = move.to();
 
@@ -179,7 +179,7 @@ public class ChessBoard implements Board, Position {
         };
     }
 
-    private boolean checkPieceIsNotNearKing(Coordinate piece) {
+    private boolean checkPieceIsNotNearKing(final Coordinate piece) {
         final Coordinate king = kingPosition.get(turn == Turn.WHITE ? Cell.BLACK_KING : Cell.WHITE_KING);
         final int dx = Math.abs(king.x() - piece.x());
         final int dy = Math.abs(king.y() - piece.y());
@@ -187,7 +187,7 @@ public class ChessBoard implements Board, Position {
     }
 
     @Override
-    public boolean isUnderAttack(Coordinate coordinate) {
+    public boolean isUnderAttack(final Coordinate coordinate) {
         final Cell piece = getCell(coordinate);
         if (piece.isEmpty()) throw new CellCanNotBeUnderAttack(piece);
         if (piece.isWhite() || piece.isBlack()) {
@@ -205,7 +205,7 @@ public class ChessBoard implements Board, Position {
     }
 
     @Override
-    public List<Move> possibleMoves(Coordinate coordinate) {
+    public List<Move> possibleMoves(final Coordinate coordinate) {
         List<Move> moves = new ArrayList<>();
         final Cell piece = getCell(coordinate);
         final int x = coordinate.x();
@@ -290,16 +290,16 @@ public class ChessBoard implements Board, Position {
     }
 
     @Override
-    public Cell getCell(int row, int column) {
+    public Cell getCell(final int row, final int column) {
         return field[row][column];
     }
 
     @Override
-    public Cell getCell(Coordinate coordinate) {
+    public Cell getCell(final Coordinate coordinate) {
         return getCell(coordinate.y(), coordinate.x());
     }
 
-    private void changeCell(Move move, Coordinate coordinate, Cell cell) {
+    private void changeCell(final Move move, final Coordinate coordinate, final Cell cell) {
         final int x = coordinate.x();
         final int y = coordinate.y();
         field[y][x] = cell;
