@@ -1,7 +1,6 @@
 package com.gmail.vusketta;
 
 import com.gmail.vusketta.exceptions.CellCanNotBeUnderAttack;
-import com.gmail.vusketta.exceptions.NoSuchMoveException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -109,7 +108,7 @@ public class ChessBoard implements Board, Position {
         return turn;
     }
 
-    private boolean isNotBetween(final Move move) throws NoSuchMoveException {
+    private boolean isNotBetween(final Move move) {
         Coordinate from = move.from();
         final Coordinate to = move.to();
         final int dx = to.x() - from.x();
