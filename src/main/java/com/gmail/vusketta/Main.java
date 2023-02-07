@@ -1,10 +1,12 @@
 package com.gmail.vusketta;
 
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
         final int result = new TwoPlayerGame(
                 new ChessBoard(),
-                new RandomPlayer(),
+                new HumanPlayer(new Scanner(System.in)),
                 new RandomPlayer()
         ).play(true);
         switch (result) {
