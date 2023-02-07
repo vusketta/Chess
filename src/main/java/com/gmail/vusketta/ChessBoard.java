@@ -12,6 +12,8 @@ public class ChessBoard implements Board, Position {
     private Turn turn;
     private int moveNumber;
     private int draw50MovesRule;
+    private boolean isPawnMoved;
+    private boolean isPieceTaken;
 
     public ChessBoard() {
         field = new Cell[8][8];
@@ -40,6 +42,8 @@ public class ChessBoard implements Board, Position {
         turn = Turn.WHITE;
         moveNumber = 1;
         draw50MovesRule = 0;
+        isPawnMoved = false;
+        isPieceTaken = false;
     }
 
     private ChessBoard(final ChessBoard chessBoard) {
@@ -57,6 +61,8 @@ public class ChessBoard implements Board, Position {
         turn = chessBoard.turn;
         moveNumber = chessBoard.moveNumber;
         draw50MovesRule = chessBoard.draw50MovesRule;
+        isPawnMoved = chessBoard.isPawnMoved;
+        isPieceTaken = chessBoard.isPieceTaken;
     }
 
     private boolean inside(Coordinate coordinate) {
@@ -102,6 +108,9 @@ public class ChessBoard implements Board, Position {
                 killCell(rookMove, rookFrom);
             }
         }
+
+        draw50MovesRule = isPieceTaken || isPawnMoved ? 0 : draw50MovesRule + 1;
+        isPieceTaken = isPawnMoved = false;
 
         if (checkDraw()) return GameResult.DRAW;
 
@@ -399,17 +408,16 @@ public class ChessBoard implements Board, Position {
     }
 
     private void changeCell(final Move move, final Coordinate coordinate, final Cell cell) {
+        if (!getCell(move.to()).isEmpty()) isPieceTaken = true;
         final int x = coordinate.x();
         final int y = coordinate.y();
         field[y][x] = cell;
         moveTrackers[y][x] = MoveTracker.of(move, moveNumber);
-        draw50MovesRule++;
-        if (cell == Cell.WHITE_PAWN || cell == Cell.BLACK_PAWN) draw50MovesRule = 0;
+        isPawnMoved = cell == Cell.WHITE_PAWN || cell == Cell.BLACK_PAWN;
     }
 
     private void killCell(final Move move, final Coordinate coordinate) {
         changeCell(move, coordinate, Cell.EMPTY);
-        draw50MovesRule = 0;
     }
 
     private boolean isNotMoved(final Coordinate coordinate) {
