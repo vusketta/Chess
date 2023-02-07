@@ -185,10 +185,10 @@ public class ChessBoard implements Board, Position {
                 Math.abs(dx) == 1 && Math.abs(dy) == 1;
         final boolean whiteRoque = (dx == 2 && getCell(0, 7) == Cell.WHITE_ROOK && isNotMoved(Coordinate.of(7, 0)) ||
                 dx == -2 && getCell(0, 0) == Cell.WHITE_ROOK && isNotMoved(Coordinate.of(0, 0))) &&
-                dy == 0 && isNotBetween(move);
+                dy == 0 && isNotBetween(move) && isNotMoved(move.from());
         final boolean blackRoque = (dx == 2 && getCell(7, 7) == Cell.BLACK_ROOK && isNotMoved(Coordinate.of(7, 7)) ||
                 dx == -2 && getCell(7, 0) == Cell.BLACK_ROOK && isNotMoved(Coordinate.of(0, 7))) &&
-                dy == 7 && isNotBetween(move);
+                dy == 7 && isNotBetween(move) && isNotMoved(move.from());
         final boolean rookMove = (dx != 0 && dy == 0 || dx == 0 && dy != 0) && isNotBetween(move);
         final boolean knightMove = Math.abs(dx) == 1 && Math.abs(dy) == 2 || Math.abs(dx) == 2 && Math.abs(dy) == 1;
         final boolean bishopMove = Math.abs(dx) == Math.abs(dy) && isNotBetween(move);
