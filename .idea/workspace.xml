@@ -4,21 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fcdb9742-30bb-45cd-8a74-0243b6c021b4" name="Changes" comment="">
+    <list default="true" id="fcdb9742-30bb-45cd-8a74-0243b6c021b4" name="Changes" comment="King can not be attacked more fix.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/ChessBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/ChessBoard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Class" />
-        <option value="Interface" />
-      </list>
-    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -32,20 +26,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/vuske/IdeaProjects/ChessTheGame/src/main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/vuske/IdeaProjects/ChessTheGame/src/main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "reference.settings.ide.settings.new.ui",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\vuske\IdeaProjects\ChessTheGame\src\main" />
@@ -81,12 +79,8 @@
       <option name="presentableId" value="Default" />
       <updated>1675710697247</updated>
       <workItem from="1675710698635" duration="2072000" />
-      <workItem from="1675719179828" duration="5855000" />
-      <workItem from="1675732296260" duration="1451000" />
-      <workItem from="1675738773243" duration="5341000" />
-      <workItem from="1675744217159" duration="32000" />
-      <workItem from="1675775373215" duration="4584000" />
-      <workItem from="1675784153869" duration="2642000" />
+      <workItem from="1675799706142" duration="72000" />
+      <workItem from="1675799790044" duration="6834000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1675710867390</created>
@@ -102,70 +96,7 @@
       <option name="project" value="LOCAL" />
       <updated>1675711581483</updated>
     </task>
-    <task id="LOCAL-00003" summary="Make an exception and used in isUnderAttack simplified method.">
-      <created>1675721351371</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1675721351371</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Kings can be near fix.">
-      <created>1675722824175</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1675722824175</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Kings can be near fix.">
-      <created>1675724192619</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1675724192619</updated>
-    </task>
-    <task id="LOCAL-00006" summary="New method changeCell">
-      <created>1675733053139</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1675733053139</updated>
-    </task>
-    <task id="LOCAL-00007" summary="Input params of methods in ChessBoard class are final now">
-      <created>1675733255639</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1675733255639</updated>
-    </task>
-    <task id="LOCAL-00008" summary="New method inside is created and isUnderAttack is remade">
-      <created>1675743943949</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1675743943949</updated>
-    </task>
-    <task id="LOCAL-00009" summary="New methods changeCell, killCell are created">
-      <created>1675776284350</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1675776284350</updated>
-    </task>
-    <task id="LOCAL-00010" summary="New method isNotMoved is created, roque move is implemented">
-      <created>1675784903179</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1675784903179</updated>
-    </task>
-    <task id="LOCAL-00011" summary="Game interface, 50 moves rule draw are implemented">
-      <created>1675785733513</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1675785733513</updated>
-    </task>
-    <option name="localTasksCounter" value="12" />
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -185,14 +116,48 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit" />
     <MESSAGE value="workspace.xml changing" />
-    <MESSAGE value="Make an exception and used in isUnderAttack simplified method." />
-    <MESSAGE value="Kings can be near fix." />
-    <MESSAGE value="New method changeCell" />
-    <MESSAGE value="Input params of methods in ChessBoard class are final now" />
-    <MESSAGE value="New method inside is created and isUnderAttack is remade" />
-    <MESSAGE value="New methods changeCell, killCell are created" />
-    <MESSAGE value="New method isNotMoved is created, roque move is implemented" />
-    <MESSAGE value="Game interface, 50 moves rule draw are implemented" />
-    <option name="LAST_COMMIT_MESSAGE" value="Game interface, 50 moves rule draw are implemented" />
+    <option name="LAST_COMMIT_MESSAGE" value="workspace.xml changing" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/com/gmail/vusketta/ChessBoard.java</url>
+          <line>73</line>
+          <properties class="com.gmail.vusketta.ChessBoard">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/com/gmail/vusketta/ChessBoard.java</url>
+          <line>160</line>
+          <properties class="com.gmail.vusketta.ChessBoard">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/com/gmail/vusketta/ChessBoard.java</url>
+          <line>233</line>
+          <properties class="com.gmail.vusketta.ChessBoard">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/com/gmail/vusketta/ChessBoard.java</url>
+          <line>295</line>
+          <properties class="com.gmail.vusketta.ChessBoard">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
