@@ -75,7 +75,7 @@ public class ChessBoard implements Board, Position {
                 final Move rookMove = Move.of(rookFrom, rookTo);
                 changeCell(rookMove, rookTo, Cell.WHITE_ROOK);
                 killCell(rookMove, rookFrom);
-            };
+            }
         } else {
             changeCell(move, move.to(), piece == Cell.BLACK_PAWN && move.to().y() == 0 ? Cell.BLACK_QUEEN : piece);
             if (piece == Cell.BLACK_PAWN && temp.isEmpty() && Math.abs(dx) == 1)
@@ -86,11 +86,13 @@ public class ChessBoard implements Board, Position {
                 final Move rookMove = Move.of(rookFrom, rookTo);
                 changeCell(rookMove, rookTo, Cell.BLACK_ROOK);
                 killCell(rookMove, rookFrom);
-            };
+            }
         }
 
         if (isUnderAttack(kingPosition.get(turn == Turn.WHITE ? Cell.WHITE_KING : Cell.BLACK_KING)))
             return GameResult.LOSE;
+
+        if (checkDraw()) return GameResult.DRAW;
 
         moveNumber++;
         turn = turn == Turn.WHITE ? Turn.BLACK : Turn.WHITE;
