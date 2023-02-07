@@ -42,6 +42,23 @@ public class ChessBoard implements Board, Position {
         draw50MovesRule = 0;
     }
 
+    private ChessBoard(final ChessBoard chessBoard) {
+        field = new Cell[8][8];
+        for (int i = 0; i < 8; i++) {
+            System.arraycopy(chessBoard.field[i], 0, field[i], 0, 8);
+        }
+        moveTrackers = new MoveTracker[8][8];
+        for (int i = 0; i < 8; i++) {
+            System.arraycopy(chessBoard.moveTrackers[i], 0, moveTrackers[i], 0, 8);
+        }
+        kingPosition = new HashMap<>();
+        kingPosition.put(Cell.WHITE_KING, chessBoard.kingPosition.get(Cell.WHITE_KING));
+        kingPosition.put(Cell.BLACK_KING, chessBoard.kingPosition.get(Cell.BLACK_KING));
+        turn = chessBoard.turn;
+        moveNumber = chessBoard.moveNumber;
+        draw50MovesRule = chessBoard.draw50MovesRule;
+    }
+
     private boolean inside(Coordinate coordinate) {
         final int x = coordinate.x();
         final int y = coordinate.y();
@@ -55,14 +72,12 @@ public class ChessBoard implements Board, Position {
 
     @Override
     public GameResult makeMove(final Move move) {
-        if (!isValid(move)) return GameResult.LOSE;
-
         Cell piece = getCell(move.from());
         if (piece == Cell.WHITE_KING || piece == Cell.BLACK_KING) kingPosition.put(piece, move.to());
 
         killCell(move, move.from());
 
-        final Cell temp = field[move.to().y()][move.to().x()];
+        final Cell temp = getCell(move.to());
         final int dx = move.to().x() - move.from().x();
         if (turn == Turn.WHITE) {
             changeCell(move, move.to(), piece == Cell.WHITE_PAWN && move.to().y() == 7 ? Cell.WHITE_QUEEN : piece);
@@ -87,9 +102,6 @@ public class ChessBoard implements Board, Position {
                 killCell(rookMove, rookFrom);
             }
         }
-
-        if (isUnderAttack(kingPosition.get(turn == Turn.WHITE ? Cell.WHITE_KING : Cell.BLACK_KING)))
-            return GameResult.LOSE;
 
         if (checkDraw()) return GameResult.DRAW;
 
@@ -192,8 +204,7 @@ public class ChessBoard implements Board, Position {
         final boolean knightMove = Math.abs(dx) == 1 && Math.abs(dy) == 2 || Math.abs(dx) == 2 && Math.abs(dy) == 1;
         final boolean bishopMove = Math.abs(dx) == Math.abs(dy) && isNotBetween(move);
         final boolean queenMove = rookMove || bishopMove;
-
-        return switch (fromPiece) {
+        final boolean pieceMove = switch (fromPiece) {
             case WHITE_PAWN -> whitePawnMove || whitePawnAttack || whiteEnPassant;
             case BLACK_PAWN -> blackPawnMove || blackPawnAttack || blackEnPassant;
             case WHITE_ROOK -> rookMove && !toPiece.isWhite();
@@ -208,6 +219,8 @@ public class ChessBoard implements Board, Position {
             case BLACK_KING -> (kingMove || blackRoque) && !toPiece.isBlack() && checkPieceIsNotNearKing(to);
             case EMPTY -> false;
         };
+
+        return pieceMove && isNotCheckAfterMove(move);
     }
 
     private boolean checkPieceIsNotNearKing(final Coordinate piece) {
@@ -278,6 +291,13 @@ public class ChessBoard implements Board, Position {
         }
 
         return false;
+    }
+
+    private boolean isNotCheckAfterMove(final Move move) {
+        final ChessBoard temp = new ChessBoard(this);
+        temp.makeMove(move);
+        final Coordinate king = temp.kingPosition.get(temp.turn == Turn.WHITE ? Cell.BLACK_KING : Cell.WHITE_KING);
+        return !temp.isUnderAttack(king);
     }
 
     @Override
@@ -437,7 +457,3 @@ public class ChessBoard implements Board, Position {
         return sb.toString();
     }
 }
-
-/*
- 6) Попробовать изучить правила, сделать рокировку.
-*/
