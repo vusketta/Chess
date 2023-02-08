@@ -19,7 +19,7 @@ public class Main {
                 new HumanPlayer(new Scanner(System.in)),
                 new HumanPlayer(new Scanner(System.in))
         );
-        final int result = RANDOM_VS_RANDOM.play(true);
+        final int result = HUMAN_VS_RANDOM.play(true);
         switch (result) {
             case 1 -> System.out.println("First player won");
             case 2 -> System.out.println("Second player won");

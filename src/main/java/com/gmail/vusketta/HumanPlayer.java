@@ -1,8 +1,13 @@
 package com.gmail.vusketta;
 
+import java.util.Map;
 import java.util.Scanner;
 
 public class HumanPlayer implements Player {
+    private final Map<Character, Integer> NOTATION = Map.of(
+            'a', 1, 'b', 2, 'c', 3, 'd', 4,
+            'e', 5, 'f', 6, 'g', 7, 'h', 8
+    );
     private final Scanner in;
 
     public HumanPlayer(Scanner in) {
@@ -19,13 +24,14 @@ public class HumanPlayer implements Player {
         Coordinate from, to;
 
         while (true) {
-            String input = in.next();
-            int fromX = Integer.parseInt(String.valueOf(input.charAt(0)));
-            int fromY = Integer.parseInt(String.valueOf(input.charAt(1)));
-            int toX = Integer.parseInt(String.valueOf(input.charAt(3)));
-            int toY = Integer.parseInt(String.valueOf(input.charAt(4)));
-            from = Coordinate.of(fromX - 1, fromY - 1);
-            to = Coordinate.of(toX - 1, toY - 1);
+            String in1 = in.next();
+            String in2 = in.next();
+            int fromX = NOTATION.get(in1.charAt(0));
+            int fromY = Integer.parseInt(String.valueOf(in1.charAt(1)));
+            int toX = NOTATION.get(in2.charAt(0));
+            int toY = Integer.parseInt(String.valueOf(in2.charAt(1)));
+            from = Coordinate.of(fromX, fromY - 1);
+            to = Coordinate.of(toX, toY - 1);
             if (position.isValid(Move.of(from, to))) break;
             System.out.println("Input move is incorrect");
             System.out.println("Try again");
