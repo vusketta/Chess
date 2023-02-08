@@ -77,13 +77,13 @@ public class ChessBoard implements Board, Position {
     }
 
     @Override
-    public GameResult makeMove(final Move move) {
-        Cell piece = getCell(move.from());
+    public GameResult makeMove(final Move move, final boolean doNotSkipGameResult) {
+        final Cell piece = getCell(move.from());
+        final Cell temp = getCell(move.to());
         if (piece == Cell.WHITE_KING || piece == Cell.BLACK_KING) kingPosition.put(piece, move.to());
 
         killCell(move, move.from());
 
-        final Cell temp = getCell(move.to());
         final int dx = move.to().x() - move.from().x();
         if (turn == Turn.WHITE) {
             changeCell(move, move.to(), piece == Cell.WHITE_PAWN && move.to().y() == 7 ? Cell.WHITE_QUEEN : piece);
@@ -112,16 +112,17 @@ public class ChessBoard implements Board, Position {
         draw50MovesRule = isPieceTaken || isPawnMoved ? 0 : draw50MovesRule + 1;
         isPieceTaken = isPawnMoved = false;
 
-        if (checkDraw()) return GameResult.DRAW;
+        if (doNotSkipGameResult && draw50MovesRule == 50) return GameResult.DRAW;
 
         moveNumber++;
         turn = turn == Turn.WHITE ? Turn.BLACK : Turn.WHITE;
-        return GameResult.UNKNOWN;
-    }
 
-    private boolean checkDraw() {
-        if (draw50MovesRule == 50) return true;
-        return false;
+        final Cell king = turn == Turn.WHITE ? Cell.WHITE_KING : Cell.BLACK_KING;
+        if (doNotSkipGameResult && allPossibleMoves().isEmpty()) {
+            return isUnderAttack(kingPosition.get(king)) ? GameResult.WIN : GameResult.DRAW;
+        }
+
+        return GameResult.UNKNOWN;
     }
 
     @Override
@@ -253,8 +254,8 @@ public class ChessBoard implements Board, Position {
         final Cell bishop = piece.isWhite() ? Cell.BLACK_BISHOP : Cell.WHITE_BISHOP;
         final Cell queen = piece.isWhite() ? Cell.BLACK_QUEEN : Cell.WHITE_QUEEN;
 
-        final Coordinate pawn1 = Coordinate.of(x - 1, piece.isWhite() ? y - 1 : y + 1);
-        final Coordinate pawn2 = Coordinate.of(x + 1, piece.isWhite() ? y - 1 : y + 1);
+        final Coordinate pawn1 = Coordinate.of(x - 1, piece.isWhite() ? y + 1 : y - 1);
+        final Coordinate pawn2 = Coordinate.of(x + 1, piece.isWhite() ? y + 1 : y - 1);
         if (inside(pawn1) && getCell(pawn1) == pawn) return true;
         if (inside(pawn2) && getCell(pawn2) == pawn) return true;
 
@@ -304,7 +305,7 @@ public class ChessBoard implements Board, Position {
 
     private boolean isNotCheckAfterMove(final Move move) {
         final ChessBoard temp = new ChessBoard(this);
-        temp.makeMove(move);
+        temp.makeMove(move, false);
         final Coordinate king = temp.kingPosition.get(temp.turn == Turn.WHITE ? Cell.BLACK_KING : Cell.WHITE_KING);
         return !temp.isUnderAttack(king);
     }

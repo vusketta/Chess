@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="fcdb9742-30bb-45cd-8a74-0243b6c021b4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/Board.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/ChessBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/ChessBoard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/TwoPlayerGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/TwoPlayerGame.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,7 +168,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675785733513</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="50 moves draw rule fix">
+      <created>1675812884694</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1675812884694</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -194,6 +203,7 @@
     <MESSAGE value="New methods changeCell, killCell are created" />
     <MESSAGE value="New method isNotMoved is created, roque move is implemented" />
     <MESSAGE value="Game interface, 50 moves rule draw are implemented" />
-    <option name="LAST_COMMIT_MESSAGE" value="Game interface, 50 moves rule draw are implemented" />
+    <MESSAGE value="50 moves draw rule fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="50 moves draw rule fix" />
   </component>
 </project>
