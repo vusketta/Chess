@@ -10,4 +10,5 @@ public interface Position {
     Cell getCell(int row, int column);
     Cell getCell(Coordinate coordinate);
     List<Coordinate> getPieceCoordinates();
+    String getFen();
 }

@@ -32,6 +32,7 @@ public class TwoPlayerGame implements Game {
             System.out.println(board);
             System.out.println("Result: " + result);
             System.out.println("MoveNumber: " + moveNumber++);
+            System.out.println("FEN: " + board.getPosition().getFen());
         }
         return switch (result) {
             case WIN -> no;

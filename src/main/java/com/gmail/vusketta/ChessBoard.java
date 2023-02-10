@@ -5,6 +5,8 @@ import com.gmail.vusketta.exceptions.CellCanNotBeUnderAttack;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.gmail.vusketta.BoardUtils.inside;
+
 public class ChessBoard implements Board, Position {
     private final Cell[][] field;
     private final MoveTracker[][] moveTrackers;
@@ -14,6 +16,7 @@ public class ChessBoard implements Board, Position {
     private int draw50MovesRule;
     private boolean isPawnMoved;
     private boolean isPieceTaken;
+    private Coordinate enPassant;
 
     public ChessBoard() {
         field = new Cell[8][8];
@@ -44,6 +47,7 @@ public class ChessBoard implements Board, Position {
         draw50MovesRule = 0;
         isPawnMoved = false;
         isPieceTaken = false;
+        enPassant = null;
     }
 
     private ChessBoard(final ChessBoard chessBoard) {
@@ -63,12 +67,7 @@ public class ChessBoard implements Board, Position {
         draw50MovesRule = chessBoard.draw50MovesRule;
         isPawnMoved = chessBoard.isPawnMoved;
         isPieceTaken = chessBoard.isPieceTaken;
-    }
-
-    private boolean inside(Coordinate coordinate) {
-        final int x = coordinate.x();
-        final int y = coordinate.y();
-        return 0 <= x && x < 8 && 0 <= y && y < 8;
+        enPassant = chessBoard.enPassant;
     }
 
     @Override
@@ -85,8 +84,12 @@ public class ChessBoard implements Board, Position {
         killCell(move, move.from());
 
         final int dx = move.to().x() - move.from().x();
+        final int dy = move.to().y() - move.from().y();
+        enPassant = null;
+
         if (turn == Turn.WHITE) {
             changeCell(move, move.to(), piece == Cell.WHITE_PAWN && move.to().y() == 7 ? Cell.WHITE_QUEEN : piece);
+            if (piece == Cell.WHITE_PAWN && dy == 2) enPassant = move.to();
             if (piece == Cell.WHITE_PAWN && temp.isEmpty() && Math.abs(dx) == 1)
                 killCell(move, Coordinate.of(move.to().x(), 4));
             if (piece == Cell.WHITE_KING && Math.abs(dx) == 2) {
@@ -98,6 +101,7 @@ public class ChessBoard implements Board, Position {
             }
         } else {
             changeCell(move, move.to(), piece == Cell.BLACK_PAWN && move.to().y() == 0 ? Cell.BLACK_QUEEN : piece);
+            if (piece == Cell.BLACK_PAWN && dy == -2) enPassant = move.to();
             if (piece == Cell.BLACK_PAWN && temp.isEmpty() && Math.abs(dx) == 1)
                 killCell(move, Coordinate.of(move.to().x(), 3));
             if (piece == Cell.BLACK_KING && Math.abs(dx) == 2) {
@@ -400,6 +404,7 @@ public class ChessBoard implements Board, Position {
 
     @Override
     public Cell getCell(final int row, final int column) {
+        assert(inside(Coordinate.of(column, row)));
         return field[row][column];
     }
 
@@ -447,6 +452,31 @@ public class ChessBoard implements Board, Position {
             }
         }
         return pieces;
+    }
+
+    @Override
+    public String getFen() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < 8; i++) {
+            int countOfEmptyCells = 0;
+            for (int j = 0; j < 8; j++) {
+                Cell cell = getCell(Coordinate.of(j, i));
+                if (cell.isEmpty()) countOfEmptyCells++;
+                else {
+                    if (countOfEmptyCells != 0) {
+                        stringBuilder.append(countOfEmptyCells);
+                        countOfEmptyCells = 0;
+                    }
+                    stringBuilder.append(cell);
+                }
+            }
+            if (countOfEmptyCells != 0) stringBuilder.append(countOfEmptyCells);
+            if (i != 7) stringBuilder.append("/");
+        }
+        stringBuilder.append(" ").append(turn == Turn.WHITE ? "w" : "b");
+        stringBuilder.append(" - ").append(enPassant == null ? "-" : enPassant);
+        stringBuilder.append(" ").append(draw50MovesRule).append(" ").append(moveNumber - 1);
+        return stringBuilder.toString();
     }
 
     @Override
