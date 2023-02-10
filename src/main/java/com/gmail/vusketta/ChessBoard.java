@@ -12,10 +12,8 @@ public class ChessBoard implements Board, Position {
     private final MoveTracker[][] moveTrackers;
     private final Map<Cell, Coordinate> kingPosition;
     private Turn turn;
-    private int moveNumber;
-    private int draw50MovesRule;
-    private boolean isPawnMoved;
-    private boolean isPieceTaken;
+    private int moveNumber, draw50MovesRule;
+    private boolean isPawnMoved, isPieceTaken;
     private Coordinate enPassant;
 
     public ChessBoard() {
