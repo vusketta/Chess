@@ -1,4 +1,7 @@
-package com.gmail.vusketta;
+package com.gmail.vusketta.board;
+
+import com.gmail.vusketta.Coordinate;
+import com.gmail.vusketta.Move;
 
 import java.util.ArrayList;
 import java.util.List;

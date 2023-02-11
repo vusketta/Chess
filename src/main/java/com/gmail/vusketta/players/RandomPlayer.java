@@ -1,4 +1,8 @@
-package com.gmail.vusketta;
+package com.gmail.vusketta.players;
+
+import com.gmail.vusketta.Coordinate;
+import com.gmail.vusketta.Move;
+import com.gmail.vusketta.Position;
 
 import java.util.List;
 import java.util.Random;

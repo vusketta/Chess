@@ -1,4 +1,4 @@
-package com.gmail.vusketta;
+package com.gmail.vusketta.board;
 
 public enum Cell {
     WHITE_PAWN(true, false, "P"), BLACK_PAWN(false, true, "p"),

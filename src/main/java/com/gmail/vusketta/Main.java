@@ -1,5 +1,8 @@
 package com.gmail.vusketta;
 
+import com.gmail.vusketta.board.ChessBoard;
+import com.gmail.vusketta.players.*;
+
 import java.util.Scanner;
 
 public class Main {
@@ -34,6 +37,11 @@ public class Main {
                 }
                 case "stockfish" -> {
                     return new StockfishPlayer();
+                }
+
+                default -> {
+                    System.out.println("Некорректный игрок");
+                    System.out.println("Попробуйте ещё раз");
                 }
             }
         }

@@ -1,4 +1,4 @@
-package com.gmail.vusketta;
+package com.gmail.vusketta.players;
 
 import java.io.BufferedReader;
 import java.io.IOException;

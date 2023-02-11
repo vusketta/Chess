@@ -1,11 +1,12 @@
-package com.gmail.vusketta;
+package com.gmail.vusketta.board;
 
+import com.gmail.vusketta.*;
 import com.gmail.vusketta.exceptions.CellCanNotBeUnderAttack;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.gmail.vusketta.BoardUtils.*;
+import static com.gmail.vusketta.board.BoardUtils.*;
 
 public class ChessBoard implements Board, Position {
     private final Cell[][] field;

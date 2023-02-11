@@ -1,5 +1,7 @@
 package com.gmail.vusketta;
 
+import com.gmail.vusketta.board.Cell;
+
 import java.util.List;
 
 public interface Position {

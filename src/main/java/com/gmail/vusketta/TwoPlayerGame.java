@@ -1,5 +1,8 @@
 package com.gmail.vusketta;
 
+import com.gmail.vusketta.board.Board;
+import com.gmail.vusketta.players.Player;
+
 public class TwoPlayerGame implements Game {
     private final Board board;
     private final Player player1;

@@ -1,4 +1,7 @@
-package com.gmail.vusketta;
+package com.gmail.vusketta.players;
+
+import com.gmail.vusketta.*;
+import com.gmail.vusketta.board.BoardUtils;
 
 import java.util.Map;
 

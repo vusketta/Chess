@@ -1,6 +1,6 @@
 package com.gmail.vusketta.exceptions;
 
-import com.gmail.vusketta.Cell;
+import com.gmail.vusketta.board.Cell;
 
 public class CellCanNotBeUnderAttack extends RuntimeException {
 

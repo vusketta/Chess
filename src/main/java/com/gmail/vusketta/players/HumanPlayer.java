@@ -1,4 +1,7 @@
-package com.gmail.vusketta;
+package com.gmail.vusketta.players;
+
+import com.gmail.vusketta.*;
+import com.gmail.vusketta.board.BoardUtils;
 
 import java.util.Map;
 import java.util.Scanner;
@@ -30,8 +33,8 @@ public class HumanPlayer implements Player {
             from = Coordinate.of(fromX, fromY - 1);
             to = Coordinate.of(toX, toY - 1);
             if (position.isValid(Move.of(from, to))) break;
-            System.out.println("Input move is incorrect");
-            System.out.println("Try again");
+            System.out.println("Некорректный ход");
+            System.out.println("Попробуйте ещё раз");
         }
 
         return new Move(from, to);

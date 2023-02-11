@@ -1,5 +1,7 @@
 package com.gmail.vusketta;
 
+import com.gmail.vusketta.board.BoardUtils;
+
 import java.util.Map;
 
 public record Coordinate(int x, int y) {
