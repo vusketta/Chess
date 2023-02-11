@@ -4,10 +4,10 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        final int result =  new TwoPlayerGame(
+        final int result = new TwoPlayerGame(
                 new ChessBoard(),
-                new HumanPlayer(new Scanner(System.in)),
-                new HumanPlayer(new Scanner(System.in))
+                new RandomPlayer(),
+                new RandomPlayer()
         ).play(true);
         switch (result) {
             case 1 -> System.out.println("First player won");

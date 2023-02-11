@@ -4,20 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fcdb9742-30bb-45cd-8a74-0243b6c021b4" name="Changes" comment="Chess notation is appeared">
-      <change afterPath="$PROJECT_DIR$/src/main/engine/stockfish-windows-2022-x86-64-avx2.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/BoardUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/Hello.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/Stockfish.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/StockfishPlayer.java" afterDir="false" />
+    <list default="true" id="fcdb9742-30bb-45cd-8a74-0243b6c021b4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/BoardUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/BoardUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/ChessBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/ChessBoard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/Coordinate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/Coordinate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/HumanPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/HumanPlayer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/Position.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/Position.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/TwoPlayerGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/TwoPlayerGame.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,7 +25,6 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/src/main/java/com/gmail/vusketta/Main.java" root0="FORCE_HIGHLIGHTING" />
@@ -129,7 +119,8 @@
       <workItem from="1675822567248" duration="983000" />
       <workItem from="1675862331085" duration="653000" />
       <workItem from="1675997830441" duration="8206000" />
-      <workItem from="1676012982454" duration="2857000" />
+      <workItem from="1676012982454" duration="3225000" />
+      <workItem from="1676082965036" duration="7183000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1675710867390</created>
@@ -229,7 +220,21 @@
       <option name="project" value="LOCAL" />
       <updated>1675818008832</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Stockfish, StockfishPlayer, BoardUtils are appeared">
+      <created>1676015907703</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1676015907703</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Merge conflict">
+      <created>1676016068159</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1676016068159</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -261,6 +266,8 @@
     <MESSAGE value="50 moves draw rule fix" />
     <MESSAGE value="Fully released version" />
     <MESSAGE value="Chess notation is appeared" />
-    <option name="LAST_COMMIT_MESSAGE" value="Chess notation is appeared" />
+    <MESSAGE value="Stockfish, StockfishPlayer, BoardUtils are appeared" />
+    <MESSAGE value="Merge conflict" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge conflict" />
   </component>
 </project>
