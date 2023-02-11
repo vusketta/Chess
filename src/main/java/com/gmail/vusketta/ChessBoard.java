@@ -5,6 +5,8 @@ import com.gmail.vusketta.exceptions.CellCanNotBeUnderAttack;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.gmail.vusketta.BoardUtils.*;
+
 public class ChessBoard implements Board, Position {
     private final Cell[][] field;
     private final MoveTracker[][] moveTrackers;
@@ -12,6 +14,8 @@ public class ChessBoard implements Board, Position {
     private Turn turn;
     private int moveNumber, draw50MovesRule;
     private boolean isPawnMoved, isPieceTaken;
+    private final boolean[] isRoqueNotUsed;
+    private Coordinate enPassant;
 
     public ChessBoard() {
         field = new Cell[8][8];
@@ -40,8 +44,9 @@ public class ChessBoard implements Board, Position {
         turn = Turn.WHITE;
         moveNumber = 1;
         draw50MovesRule = 0;
-        isPawnMoved = false;
-        isPieceTaken = false;
+        isPawnMoved = isPieceTaken = false;
+        isRoqueNotUsed = new boolean[]{true, true, true, true};
+        enPassant = null;
     }
 
     private ChessBoard(final ChessBoard chessBoard) {
@@ -61,12 +66,9 @@ public class ChessBoard implements Board, Position {
         draw50MovesRule = chessBoard.draw50MovesRule;
         isPawnMoved = chessBoard.isPawnMoved;
         isPieceTaken = chessBoard.isPieceTaken;
-    }
-
-    private boolean inside(Coordinate coordinate) {
-        final int x = coordinate.x();
-        final int y = coordinate.y();
-        return 0 <= x && x < 8 && 0 <= y && y < 8;
+        isRoqueNotUsed = new boolean[4];
+        System.arraycopy(chessBoard.isRoqueNotUsed, 0, isRoqueNotUsed, 0, 4);
+        enPassant = chessBoard.enPassant;
     }
 
     @Override
@@ -83,11 +85,16 @@ public class ChessBoard implements Board, Position {
         killCell(move, move.from());
 
         final int dx = move.to().x() - move.from().x();
+        final int dy = move.to().y() - move.from().y();
+        enPassant = null;
+
         if (turn == Turn.WHITE) {
             changeCell(move, move.to(), piece == Cell.WHITE_PAWN && move.to().y() == 7 ? Cell.WHITE_QUEEN : piece);
+            if (piece == Cell.WHITE_PAWN && dy == 2) enPassant = move.to();
             if (piece == Cell.WHITE_PAWN && temp.isEmpty() && Math.abs(dx) == 1)
                 killCell(move, Coordinate.of(move.to().x(), 4));
             if (piece == Cell.WHITE_KING && Math.abs(dx) == 2) {
+                isRoqueNotUsed[dx == 2 ? 0 : 1] = false;
                 final Coordinate rookFrom = dx == 2 ? Coordinate.of(7, 0) : Coordinate.of(0, 0);
                 final Coordinate rookTo = dx == 2 ? Coordinate.of(5, 0) : Coordinate.of(3, 0);
                 final Move rookMove = Move.of(rookFrom, rookTo);
@@ -96,9 +103,11 @@ public class ChessBoard implements Board, Position {
             }
         } else {
             changeCell(move, move.to(), piece == Cell.BLACK_PAWN && move.to().y() == 0 ? Cell.BLACK_QUEEN : piece);
+            if (piece == Cell.BLACK_PAWN && dy == -2) enPassant = move.to();
             if (piece == Cell.BLACK_PAWN && temp.isEmpty() && Math.abs(dx) == 1)
                 killCell(move, Coordinate.of(move.to().x(), 3));
             if (piece == Cell.BLACK_KING && Math.abs(dx) == 2) {
+                isRoqueNotUsed[dx == 2 ? 2 : 3] = false;
                 final Coordinate rookFrom = dx == 2 ? Coordinate.of(7, 7) : Coordinate.of(0, 7);
                 final Coordinate rookTo = dx == 2 ? Coordinate.of(5, 7) : Coordinate.of(3, 7);
                 final Move rookMove = Move.of(rookFrom, rookTo);
@@ -170,14 +179,13 @@ public class ChessBoard implements Board, Position {
         final Coordinate from = move.from();
         final Coordinate to = move.to();
 
-        if (!inside(from)) return false;
-        if (!inside(to)) return false;
+        if (!inside(from) || !inside(to)) return false;
 
         final Cell fromPiece = getCell(from);
-        if (turn == Turn.WHITE && fromPiece.isBlack()) {
+        if (turn == Turn.WHITE && !fromPiece.isWhite()) {
             return false;
         }
-        if (turn == Turn.BLACK && fromPiece.isWhite()) {
+        if (turn == Turn.BLACK && !fromPiece.isBlack()) {
             return false;
         }
 
@@ -200,42 +208,31 @@ public class ChessBoard implements Board, Position {
                 Math.abs(dx) == 1 && getCell(3, to.x()) == Cell.WHITE_PAWN &&
                 moveTrackers[3][to.x()].moveNumber() == moveNumber - 1 &&
                 moveTrackers[3][to.x()].move().equals(Move.of(Coordinate.of(to.x(), 1), Coordinate.of(to.x(), 3)));
-        final boolean kingMove = Math.abs(dx) == 1 && Math.abs(dy) == 0 || Math.abs(dx) == 0 && Math.abs(dy) == 1 ||
-                Math.abs(dx) == 1 && Math.abs(dy) == 1;
         final boolean whiteRoque = (dx == 2 && getCell(0, 7) == Cell.WHITE_ROOK && isNotMoved(Coordinate.of(7, 0)) ||
                 dx == -2 && getCell(0, 0) == Cell.WHITE_ROOK && isNotMoved(Coordinate.of(0, 0))) &&
                 dy == 0 && isNotBetween(move) && isNotMoved(move.from());
         final boolean blackRoque = (dx == 2 && getCell(7, 7) == Cell.BLACK_ROOK && isNotMoved(Coordinate.of(7, 7)) ||
                 dx == -2 && getCell(7, 0) == Cell.BLACK_ROOK && isNotMoved(Coordinate.of(0, 7))) &&
                 dy == 7 && isNotBetween(move) && isNotMoved(move.from());
-        final boolean rookMove = (dx != 0 && dy == 0 || dx == 0 && dy != 0) && isNotBetween(move);
-        final boolean knightMove = Math.abs(dx) == 1 && Math.abs(dy) == 2 || Math.abs(dx) == 2 && Math.abs(dy) == 1;
-        final boolean bishopMove = Math.abs(dx) == Math.abs(dy) && isNotBetween(move);
-        final boolean queenMove = rookMove || bishopMove;
         final boolean pieceMove = switch (fromPiece) {
             case WHITE_PAWN -> whitePawnMove || whitePawnAttack || whiteEnPassant;
             case BLACK_PAWN -> blackPawnMove || blackPawnAttack || blackEnPassant;
-            case WHITE_ROOK -> rookMove && !toPiece.isWhite();
-            case BLACK_ROOK -> rookMove && !toPiece.isBlack();
-            case WHITE_KNIGHT -> knightMove && !toPiece.isWhite();
-            case BLACK_KNIGHT -> knightMove && !toPiece.isBlack();
-            case WHITE_BISHOP -> bishopMove && !toPiece.isWhite();
-            case BLACK_BISHOP -> bishopMove && !toPiece.isBlack();
-            case WHITE_QUEEN -> queenMove && !toPiece.isWhite();
-            case BLACK_QUEEN -> queenMove && !toPiece.isBlack();
-            case WHITE_KING -> (kingMove || whiteRoque) && !toPiece.isWhite() && checkPieceIsNotNearKing(to);
-            case BLACK_KING -> (kingMove || blackRoque) && !toPiece.isBlack() && checkPieceIsNotNearKing(to);
+            case WHITE_ROOK -> checkRookMove(dx, dy) && isNotBetween(move) && !toPiece.isWhite();
+            case BLACK_ROOK -> checkRookMove(dx, dy) && isNotBetween(move) && !toPiece.isBlack();
+            case WHITE_KNIGHT -> checkKnightMove(dx, dy) && !toPiece.isWhite();
+            case BLACK_KNIGHT -> checkKnightMove(dx, dy) && !toPiece.isBlack();
+            case WHITE_BISHOP -> checkBishopMove(dx, dy) && isNotBetween(move) && !toPiece.isWhite();
+            case BLACK_BISHOP -> checkBishopMove(dx, dy) && isNotBetween(move) && !toPiece.isBlack();
+            case WHITE_QUEEN -> checkQueenMove(dx, dy) && isNotBetween(move) && !toPiece.isWhite();
+            case BLACK_QUEEN -> checkQueenMove(dx, dy) && isNotBetween(move) && !toPiece.isBlack();
+            case WHITE_KING -> (checkKingMove(dx, dy) || whiteRoque) && !toPiece.isWhite() &&
+                    checkPieceIsNotNearKing(to, kingPosition.get(turn == Turn.WHITE ? Cell.BLACK_KING : Cell.WHITE_KING));
+            case BLACK_KING -> (checkKingMove(dx, dy) || blackRoque) && !toPiece.isBlack() &&
+                    checkPieceIsNotNearKing(to, kingPosition.get(turn == Turn.WHITE ? Cell.BLACK_KING : Cell.WHITE_KING));
             case EMPTY -> false;
         };
 
         return pieceMove && isNotCheckAfterMove(move);
-    }
-
-    private boolean checkPieceIsNotNearKing(final Coordinate piece) {
-        final Coordinate king = kingPosition.get(turn == Turn.WHITE ? Cell.BLACK_KING : Cell.WHITE_KING);
-        final int dx = Math.abs(king.x() - piece.x());
-        final int dy = Math.abs(king.y() - piece.y());
-        return !(dx == 1 && dy == 0 || dx == 0 && dy == 1 || dx == 1 && dy == 1);
     }
 
     @Override
@@ -257,45 +254,22 @@ public class ChessBoard implements Board, Position {
         if (inside(pawn1) && getCell(pawn1) == pawn) return true;
         if (inside(pawn2) && getCell(pawn2) == pawn) return true;
 
-        for (int i = 0; i < 8; i++) {
-            final Coordinate rook1 = Coordinate.of(x, i);
-            final Coordinate rook2 = Coordinate.of(i, y);
-            if (inside(rook1) && (getCell(rook1) == rook || getCell(rook1) == queen) && isNotBetween(Move.of(rook1, coordinate)))
-                return true;
-            if (inside(rook2) && (getCell(rook2) == rook || getCell(rook2) == queen) && isNotBetween(Move.of(rook2, coordinate)))
+        final List<Coordinate> rooks = getRookAttacks(x, y);
+        for (Coordinate rook1 : rooks) {
+            if (inside(rook1) && (getCell(rook1) == rook || getCell(rook1) == queen)
+                    && isNotBetween(Move.of(rook1, coordinate)))
                 return true;
         }
 
-        final Coordinate knight1 = Coordinate.of(x + 2, y + 1);
-        final Coordinate knight2 = Coordinate.of(x + 2, y - 1);
-        final Coordinate knight3 = Coordinate.of(x - 2, y + 1);
-        final Coordinate knight4 = Coordinate.of(x - 2, y - 1);
-        final Coordinate knight5 = Coordinate.of(x + 1, y + 2);
-        final Coordinate knight6 = Coordinate.of(x + 1, y - 2);
-        final Coordinate knight7 = Coordinate.of(x - 1, y + 2);
-        final Coordinate knight8 = Coordinate.of(x - 1, y - 2);
-        if (inside(knight1) && getCell(knight1) == knight) return true;
-        if (inside(knight2) && getCell(knight2) == knight) return true;
-        if (inside(knight3) && getCell(knight3) == knight) return true;
-        if (inside(knight4) && getCell(knight4) == knight) return true;
-        if (inside(knight5) && getCell(knight5) == knight) return true;
-        if (inside(knight6) && getCell(knight6) == knight) return true;
-        if (inside(knight7) && getCell(knight7) == knight) return true;
-        if (inside(knight8) && getCell(knight8) == knight) return true;
+        final List<Coordinate> knights = getKnightAttacks(x, y);
+        for (Coordinate knight1 : knights) {
+            if (inside(knight1) && getCell(knight1) == knight) return true;
+        }
 
-        for (int i = 0; i < 8; i++) {
-            final Coordinate bishop1 = Coordinate.of(x + i, y + i);
-            final Coordinate bishop2 = Coordinate.of(x + i, y - i);
-            final Coordinate bishop3 = Coordinate.of(x - i, y + i);
-            final Coordinate bishop4 = Coordinate.of(x - i, y - i);
-            if (inside(bishop1) && (getCell(bishop1) == bishop || getCell(bishop1) == queen) && isNotBetween(Move.of(bishop1, coordinate)))
-                return true;
-            if (inside(bishop2) && (getCell(bishop2) == bishop || getCell(bishop2) == queen) && isNotBetween(Move.of(bishop2, coordinate)))
-                return true;
-            if (inside(bishop3) && (getCell(bishop3) == bishop || getCell(bishop3) == queen) && isNotBetween(Move.of(bishop3, coordinate)))
-                return true;
-            if (inside(bishop4) && (getCell(bishop4) == bishop || getCell(bishop4) == queen) && isNotBetween(Move.of(bishop4, coordinate)))
-                return true;
+        final List<Coordinate> bishops = getBishopAttacks(x, y);
+        for (Coordinate bishop1 : bishops) {
+            if (inside(bishop1) && (getCell(bishop1) == bishop || getCell(bishop1) == queen)
+                    && isNotBetween(Move.of(bishop1, coordinate))) return true;
         }
 
         return false;
@@ -310,94 +284,24 @@ public class ChessBoard implements Board, Position {
 
     @Override
     public List<Move> possibleMoves(final Coordinate coordinate) {
-        List<Move> moves = new ArrayList<>();
+        assert (inside(coordinate));
         final Cell piece = getCell(coordinate);
-        final int x = coordinate.x();
-        final int y = coordinate.y();
-        switch (piece) {
-            case WHITE_PAWN -> {
-                moves.add(Move.of(coordinate, Coordinate.of(x, y + 1)));
-                moves.add(Move.of(coordinate, Coordinate.of(x + 1, y + 1)));
-                moves.add(Move.of(coordinate, Coordinate.of(x - 1, y + 1)));
-                moves.add(Move.of(coordinate, Coordinate.of(x, y + 2)));
-                moves.add(Move.of(coordinate, Coordinate.of(x - 1, 5)));
-                moves.add(Move.of(coordinate, Coordinate.of(x + 1, 5)));
-            }
-            case BLACK_PAWN -> {
-                moves.add(Move.of(coordinate, Coordinate.of(x, y - 1)));
-                moves.add(Move.of(coordinate, Coordinate.of(x + 1, y - 1)));
-                moves.add(Move.of(coordinate, Coordinate.of(x - 1, y - 1)));
-                moves.add(Move.of(coordinate, Coordinate.of(x, y - 2)));
-                moves.add(Move.of(coordinate, Coordinate.of(x - 1, 2)));
-                moves.add(Move.of(coordinate, Coordinate.of(x + 1, 2)));
-            }
-            case WHITE_ROOK, BLACK_ROOK -> {
-                for (int i = 1; i < 8; i++) {
-                    moves.add(Move.of(coordinate, Coordinate.of(x + i, y)));
-                    moves.add(Move.of(coordinate, Coordinate.of(x, y + i)));
-                    moves.add(Move.of(coordinate, Coordinate.of(x - i, y)));
-                    moves.add(Move.of(coordinate, Coordinate.of(x, y - i)));
-                }
-            }
-            case WHITE_KNIGHT, BLACK_KNIGHT -> {
-                moves.add(Move.of(coordinate, Coordinate.of(x + 1, y + 2)));
-                moves.add(Move.of(coordinate, Coordinate.of(x + 1, y - 2)));
-                moves.add(Move.of(coordinate, Coordinate.of(x - 1, y - 2)));
-                moves.add(Move.of(coordinate, Coordinate.of(x - 1, y + 2)));
-                moves.add(Move.of(coordinate, Coordinate.of(x + 2, y + 1)));
-                moves.add(Move.of(coordinate, Coordinate.of(x + 2, y - 1)));
-                moves.add(Move.of(coordinate, Coordinate.of(x - 2, y + 1)));
-                moves.add(Move.of(coordinate, Coordinate.of(x - 2, y - 1)));
-            }
-            case WHITE_BISHOP, BLACK_BISHOP -> {
-                for (int i = 1; i < 8; i++) {
-                    moves.add(Move.of(coordinate, Coordinate.of(x + i, y + i)));
-                    moves.add(Move.of(coordinate, Coordinate.of(x - i, y + i)));
-                    moves.add(Move.of(coordinate, Coordinate.of(x + i, y - i)));
-                    moves.add(Move.of(coordinate, Coordinate.of(x - i, y - i)));
-                }
-            }
-            case WHITE_QUEEN, BLACK_QUEEN -> {
-                for (int i = 1; i < 8; i++) {
-                    moves.add(Move.of(coordinate, Coordinate.of(x + i, y)));
-                    moves.add(Move.of(coordinate, Coordinate.of(x, y + i)));
-                    moves.add(Move.of(coordinate, Coordinate.of(x - i, y)));
-                    moves.add(Move.of(coordinate, Coordinate.of(x, y - i)));
-                    moves.add(Move.of(coordinate, Coordinate.of(x + i, y + i)));
-                    moves.add(Move.of(coordinate, Coordinate.of(x - i, y + i)));
-                    moves.add(Move.of(coordinate, Coordinate.of(x + i, y - i)));
-                    moves.add(Move.of(coordinate, Coordinate.of(x - i, y - i)));
-                }
-            }
-            case WHITE_KING, BLACK_KING -> {
-                moves.add(Move.of(coordinate, Coordinate.of(x + 1, y + 1)));
-                moves.add(Move.of(coordinate, Coordinate.of(x + 1, y)));
-                moves.add(Move.of(coordinate, Coordinate.of(x + 1, y - 1)));
-                moves.add(Move.of(coordinate, Coordinate.of(x, y - 1)));
-                moves.add(Move.of(coordinate, Coordinate.of(x, y + 1)));
-                moves.add(Move.of(coordinate, Coordinate.of(x - 1, y + 1)));
-                moves.add(Move.of(coordinate, Coordinate.of(x - 1, y)));
-                moves.add(Move.of(coordinate, Coordinate.of(x - 1, y - 1)));
-                moves.add(Move.of(coordinate, Coordinate.of(x + 2, y)));
-                moves.add(Move.of(coordinate, Coordinate.of(x - 2, y)));
-            }
-            case EMPTY -> {
-            }
-        }
-        return moves.stream().filter(this::isValid).collect(Collectors.toList());
+        return getPieceMoves(piece, coordinate)
+                .stream()
+                .filter(this::isValid)
+                .collect(Collectors.toList());
     }
 
     private List<Move> allPossibleMoves() {
         List<Move> allMoves = new ArrayList<>();
         List<Coordinate> pieces = getPieceCoordinates();
-        for (Coordinate piece : pieces) {
-            allMoves.addAll(possibleMoves(piece));
-        }
+        for (Coordinate piece : pieces) allMoves.addAll(possibleMoves(piece));
         return allMoves;
     }
 
     @Override
     public Cell getCell(final int row, final int column) {
+        assert (inside(Coordinate.of(column, row)));
         return field[row][column];
     }
 
@@ -420,10 +324,14 @@ public class ChessBoard implements Board, Position {
     }
 
     private boolean isNotMoved(final Coordinate coordinate) {
+        assert (inside(coordinate));
         final int x = coordinate.x();
         final int y = coordinate.y();
         return moveTrackers[y][x].equals(
-                MoveTracker.of(Move.of(Coordinate.of(-1, -1), Coordinate.of(-1, -1)), 0));
+                MoveTracker.of(
+                        Move.of(Coordinate.of(-1, -1), Coordinate.of(-1, -1)), 0
+                )
+        );
     }
 
     @Override
@@ -445,6 +353,34 @@ public class ChessBoard implements Board, Position {
             }
         }
         return pieces;
+    }
+
+    @Override
+    public String getFen() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < 8; i++) {
+            int countOfEmptyCells = 0;
+            for (int j = 0; j < 8; j++) {
+                Cell cell = getCell(Coordinate.of(j, 8 - i - 1));
+                if (cell.isEmpty()) countOfEmptyCells++;
+                else {
+                    if (countOfEmptyCells != 0) {
+                        stringBuilder.append(countOfEmptyCells);
+                        countOfEmptyCells = 0;
+                    }
+                    stringBuilder.append(cell);
+                }
+            }
+            if (countOfEmptyCells != 0) stringBuilder.append(countOfEmptyCells);
+            if (i != 7) stringBuilder.append("/");
+        }
+        stringBuilder.append(" ").append(turn == Turn.WHITE ? "w" : "b");
+        stringBuilder.append(" ").append(isRoqueNotUsed[0] ? "K" : "");
+        stringBuilder.append(isRoqueNotUsed[1] ? "Q" : "").append(isRoqueNotUsed[2] ? "k" : "");
+        stringBuilder.append(isRoqueNotUsed[3] ? "q" : "").append(" ");
+        stringBuilder.append(enPassant == null ? "-" : enPassant);
+        stringBuilder.append(" ").append(draw50MovesRule).append(" ").append(moveNumber - 1);
+        return stringBuilder.toString();
     }
 
     @Override

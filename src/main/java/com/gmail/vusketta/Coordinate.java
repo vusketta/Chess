@@ -1,5 +1,7 @@
 package com.gmail.vusketta;
 
+import java.util.Map;
+
 public record Coordinate(int x, int y) {
 
     public static Coordinate of(int x, int y) {
@@ -16,6 +18,7 @@ public record Coordinate(int x, int y) {
 
     @Override
     public String toString() {
-        return "(" + x + ", " + y + ")";
+        Map<Integer, Character> notation = BoardUtils.getReversedNotation();
+        return String.valueOf(notation.get(x + 1)) + (y + 1);
     }
 }

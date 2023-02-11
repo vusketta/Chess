@@ -1,12 +1,12 @@
 package com.gmail.vusketta;
 
 public enum Cell {
-    WHITE_PAWN(true, false, "p"), BLACK_PAWN(false, true, "P"),
-    WHITE_ROOK(true, false, "r"), BLACK_ROOK(false, true, "R"),
-    WHITE_KNIGHT(true, false, "n"), BLACK_KNIGHT(false, true, "N"),
-    WHITE_BISHOP(true, false, "b"), BLACK_BISHOP(false, true, "B"),
-    WHITE_QUEEN(true, false, "q"), BLACK_QUEEN(false, true, "Q"),
-    WHITE_KING(true, false, "k"), BLACK_KING(false, true, "K"),
+    WHITE_PAWN(true, false, "P"), BLACK_PAWN(false, true, "p"),
+    WHITE_ROOK(true, false, "R"), BLACK_ROOK(false, true, "r"),
+    WHITE_KNIGHT(true, false, "N"), BLACK_KNIGHT(false, true, "n"),
+    WHITE_BISHOP(true, false, "B"), BLACK_BISHOP(false, true, "b"),
+    WHITE_QUEEN(true, false, "Q"), BLACK_QUEEN(false, true, "q"),
+    WHITE_KING(true, false, "K"), BLACK_KING(false, true, "k"),
     EMPTY(false, false, ".");
 
     private final boolean isWhite;

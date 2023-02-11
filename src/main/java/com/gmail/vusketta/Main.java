@@ -20,7 +20,10 @@ public class Main {
 
     private static Player getPlayer() {
         Scanner in = new Scanner(System.in);
-        System.out.println("Введите \"human\" для обычного игрока или \"random\" для случайного: ");
+        System.out.println(
+                "Введите \"human\" для обычного игрока, " +
+                        "\"random\" для случайного или \"stockfish\" для сверх гения: "
+        );
         while (true) {
             switch (in.next()) {
                 case "human" -> {
@@ -28,6 +31,9 @@ public class Main {
                 }
                 case "random" -> {
                     return new RandomPlayer();
+                }
+                case "stockfish" -> {
+                    return new StockfishPlayer();
                 }
             }
         }

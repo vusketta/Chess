@@ -4,10 +4,6 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class HumanPlayer implements Player {
-    private final Map<Character, Integer> NOTATION = Map.of(
-            'a', 0, 'b', 1, 'c', 2, 'd', 3,
-            'e', 4, 'f', 5, 'g', 6, 'h', 7
-    );
     private final Scanner in;
 
     public HumanPlayer(Scanner in) {
@@ -24,11 +20,12 @@ public class HumanPlayer implements Player {
         Coordinate from, to;
 
         while (true) {
+            Map<Character, Integer> notation = BoardUtils.getNotation();
             String in1 = in.next();
             String in2 = in.next();
-            int fromX = NOTATION.get(in1.charAt(0));
+            int fromX = notation.get(in1.charAt(0)) - 1;
             int fromY = Integer.parseInt(String.valueOf(in1.charAt(1)));
-            int toX = NOTATION.get(in2.charAt(0));
+            int toX = notation.get(in2.charAt(0)) - 1;
             int toY = Integer.parseInt(String.valueOf(in2.charAt(1)));
             from = Coordinate.of(fromX, fromY - 1);
             to = Coordinate.of(toX, toY - 1);
