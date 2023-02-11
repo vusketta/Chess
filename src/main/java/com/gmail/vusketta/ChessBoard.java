@@ -179,8 +179,7 @@ public class ChessBoard implements Board, Position {
         final Coordinate from = move.from();
         final Coordinate to = move.to();
 
-        if (!inside(from)) return false;
-        if (!inside(to)) return false;
+        if (!inside(from) || !inside(to)) return false;
 
         final Cell fromPiece = getCell(from);
         if (turn == Turn.WHITE && fromPiece.isBlack()) {
@@ -209,32 +208,26 @@ public class ChessBoard implements Board, Position {
                 Math.abs(dx) == 1 && getCell(3, to.x()) == Cell.WHITE_PAWN &&
                 moveTrackers[3][to.x()].moveNumber() == moveNumber - 1 &&
                 moveTrackers[3][to.x()].move().equals(Move.of(Coordinate.of(to.x(), 1), Coordinate.of(to.x(), 3)));
-        final boolean kingMove = Math.abs(dx) == 1 && Math.abs(dy) == 0 || Math.abs(dx) == 0 && Math.abs(dy) == 1 ||
-                Math.abs(dx) == 1 && Math.abs(dy) == 1;
         final boolean whiteRoque = (dx == 2 && getCell(0, 7) == Cell.WHITE_ROOK && isNotMoved(Coordinate.of(7, 0)) ||
                 dx == -2 && getCell(0, 0) == Cell.WHITE_ROOK && isNotMoved(Coordinate.of(0, 0))) &&
                 dy == 0 && isNotBetween(move) && isNotMoved(move.from());
         final boolean blackRoque = (dx == 2 && getCell(7, 7) == Cell.BLACK_ROOK && isNotMoved(Coordinate.of(7, 7)) ||
                 dx == -2 && getCell(7, 0) == Cell.BLACK_ROOK && isNotMoved(Coordinate.of(0, 7))) &&
                 dy == 7 && isNotBetween(move) && isNotMoved(move.from());
-        final boolean rookMove = (dx != 0 && dy == 0 || dx == 0 && dy != 0) && isNotBetween(move);
-        final boolean knightMove = Math.abs(dx) == 1 && Math.abs(dy) == 2 || Math.abs(dx) == 2 && Math.abs(dy) == 1;
-        final boolean bishopMove = Math.abs(dx) == Math.abs(dy) && isNotBetween(move);
-        final boolean queenMove = rookMove || bishopMove;
         final boolean pieceMove = switch (fromPiece) {
             case WHITE_PAWN -> whitePawnMove || whitePawnAttack || whiteEnPassant;
             case BLACK_PAWN -> blackPawnMove || blackPawnAttack || blackEnPassant;
-            case WHITE_ROOK -> rookMove && !toPiece.isWhite();
-            case BLACK_ROOK -> rookMove && !toPiece.isBlack();
-            case WHITE_KNIGHT -> knightMove && !toPiece.isWhite();
-            case BLACK_KNIGHT -> knightMove && !toPiece.isBlack();
-            case WHITE_BISHOP -> bishopMove && !toPiece.isWhite();
-            case BLACK_BISHOP -> bishopMove && !toPiece.isBlack();
-            case WHITE_QUEEN -> queenMove && !toPiece.isWhite();
-            case BLACK_QUEEN -> queenMove && !toPiece.isBlack();
-            case WHITE_KING -> (kingMove || whiteRoque) && !toPiece.isWhite() &&
+            case WHITE_ROOK -> checkRookMove(dx, dy) && isNotBetween(move) && !toPiece.isWhite();
+            case BLACK_ROOK -> checkRookMove(dx, dy) && isNotBetween(move) && !toPiece.isBlack();
+            case WHITE_KNIGHT -> checkKnightMove(dx, dy) && !toPiece.isWhite();
+            case BLACK_KNIGHT -> checkKnightMove(dx, dy) && !toPiece.isBlack();
+            case WHITE_BISHOP -> checkBishopMove(dx, dy) && isNotBetween(move) && !toPiece.isWhite();
+            case BLACK_BISHOP -> checkBishopMove(dx, dy) && isNotBetween(move) && !toPiece.isBlack();
+            case WHITE_QUEEN -> checkQueenMove(dx, dy) && isNotBetween(move) && !toPiece.isWhite();
+            case BLACK_QUEEN -> checkQueenMove(dx, dy) && isNotBetween(move) && !toPiece.isBlack();
+            case WHITE_KING -> (checkKingMove(dx, dy) || whiteRoque) && !toPiece.isWhite() &&
                     checkPieceIsNotNearKing(to, kingPosition.get(turn == Turn.WHITE ? Cell.BLACK_KING : Cell.WHITE_KING));
-            case BLACK_KING -> (kingMove || blackRoque) && !toPiece.isBlack() &&
+            case BLACK_KING -> (checkKingMove(dx, dy) || blackRoque) && !toPiece.isBlack() &&
                     checkPieceIsNotNearKing(to, kingPosition.get(turn == Turn.WHITE ? Cell.BLACK_KING : Cell.WHITE_KING));
             case EMPTY -> false;
         };

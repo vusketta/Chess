@@ -11,6 +11,27 @@ public class BoardUtils {
         return 0 <= x && x < 8 && 0 <= y && y < 8;
     }
 
+    public static boolean checkRookMove(final int dx, final int dy) {
+        return dx != 0 && dy == 0 || dx == 0 && dy != 0;
+    }
+
+    public static boolean checkKnightMove(final int dx, final int dy) {
+        return Math.abs(dx) == 1 && Math.abs(dy) == 2 || Math.abs(dx) == 2 && Math.abs(dy) == 1;
+    }
+
+    public static boolean checkBishopMove(final int dx, final int dy) {
+        return Math.abs(dx) == Math.abs(dy);
+    }
+
+    public static boolean checkQueenMove(final int dx, final int dy) {
+        return checkRookMove(dx, dy) || checkBishopMove(dx, dy);
+    }
+
+    public static boolean checkKingMove(final int dx, final int dy) {
+        return Math.abs(dx) == 1 && Math.abs(dy) == 0 || Math.abs(dx) == 0 && Math.abs(dy) == 1 ||
+                Math.abs(dx) == 1 && Math.abs(dy) == 1;
+    }
+
     public static boolean checkPieceIsNotNearKing(final Coordinate piece, final Coordinate king) {
         final int dx = Math.abs(king.x() - piece.x());
         final int dy = Math.abs(king.y() - piece.y());

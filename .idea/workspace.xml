@@ -8,7 +8,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/BoardUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/BoardUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/ChessBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/ChessBoard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gmail/vusketta/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +30,9 @@
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectId" id="2LNTlfXMbP6VAksDx4pesKlVP8J" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -120,7 +122,7 @@
       <workItem from="1675862331085" duration="653000" />
       <workItem from="1675997830441" duration="8206000" />
       <workItem from="1676012982454" duration="3225000" />
-      <workItem from="1676082965036" duration="7183000" />
+      <workItem from="1676082965036" duration="8657000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1675710867390</created>
@@ -234,7 +236,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676016068159</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="possibleMoves method is redesigned">
+      <created>1676090498039</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1676090498039</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -268,6 +277,7 @@
     <MESSAGE value="Chess notation is appeared" />
     <MESSAGE value="Stockfish, StockfishPlayer, BoardUtils are appeared" />
     <MESSAGE value="Merge conflict" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge conflict" />
+    <MESSAGE value="possibleMoves method is redesigned" />
+    <option name="LAST_COMMIT_MESSAGE" value="possibleMoves method is redesigned" />
   </component>
 </project>
